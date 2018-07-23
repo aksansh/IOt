@@ -1,0 +1,42 @@
+#include <IRremoteInt.h>
+#include <IRremote.h>
+#include <ir_Lego_PF_BitStreamEncoder.h>
+#include <boarddefs.h>
+
+int receiver = 11;
+
+IRrecv irrecv(receiver);
+decode_results results;
+
+void setup(){
+  Serial.begin(9600);
+  irrecv.enableIRIn();
+  pinMode(8,OUTPUT);
+}
+
+void loop(){
+  
+  if(irrecv.decode(&results))
+  {
+    
+    translateIR();
+    irrecv.resume();
+  }
+}
+
+void translateIR(){
+  
+  switch(results.value)
+  
+  {
+    case 0x14EB18E7:
+      digitalWrite(8,HIGH);
+      break;
+    default:
+      Serial.println("Not used");
+  }
+
+  delay(100);
+  Serial.println(results.value);
+}  
+
